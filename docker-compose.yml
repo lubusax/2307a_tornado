@@ -1,0 +1,45 @@
+version: '3'
+services:
+  2307a_tornado:
+    build: .
+    container_name: 2307a_tornado
+    restart: unless-stopped
+    env_file: .env
+    # environment:
+    #   - POSTGRES_DB=${POSTGRES_DB}
+    #   - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    #   - POSTGRES_USER=${POSTGRES_USER}
+    ports:
+      - 8888 
+    # volumes:
+    #   - .:/app # BIND MOUNT -  facilitates rapid development, since any changes will be populated immediately in the container.
+    #   - node_modules:/app/node_modules
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.routers.2307a_tornado.rule=Host(`2307a_tornado.thingserp.com`)"
+      - "traefik.http.routers.2307a_tornado.entrypoints=web"
+      - "traefik.http.routers.2307a_tornado.service=svc_2307a_tornado"
+
+      - "traefik.http.routers.2307a_tornado-https.rule=Host(`2307a_tornado.thingserp.com`)"
+      - "traefik.http.routers.2307a_tornado-https.entrypoints=websecure"
+      - "traefik.http.routers.2307a_tornado-https.service=svc_2307a_tornado"
+
+      - "traefik.http.services.svc_2307a_tornado.loadbalancer.server.port=8888"
+
+      - "traefik.http.routers.2307a_tornado-https.tls=true"
+      - "traefik.http.routers.2307a_tornado-https.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.2307a_tornado-https.tls.domains[0].main=2307a_tornado.thingserp.com"
+
+    networks:
+      - psql_cronos # network name for backend 
+      - proxy # network name for frontend (traefik)
+# volumes:
+#   node_modules:
+
+
+networks:
+  psql_cronos:
+    external: true
+  proxy:
+    external: true
