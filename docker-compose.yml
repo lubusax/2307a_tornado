@@ -11,8 +11,8 @@ services:
     #   - POSTGRES_USER=${POSTGRES_USER}
     ports:
       - 8888 
-    # volumes:
-    #   - .:/app # BIND MOUNT -  facilitates rapid development, since any changes will be populated immediately in the container.
+    volumes:
+     - .:/app # BIND MOUNT -  facilitates rapid development, since any changes will be populated immediately in the container.
     #   - node_modules:/app/node_modules
     labels:
       - "traefik.enable=true"

@@ -12,6 +12,9 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "python" ]
+# ENTRYPOINT [ "python" ]
 
-CMD [ "server.py" ]
+# CMD [ "server.py" ]
+
+# Start the container and keep it running indefinitely
+CMD tail -f /dev/null
